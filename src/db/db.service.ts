@@ -8,13 +8,17 @@ import { CreateTrackDto } from 'src/tracks/dto/create-track.dto';
 import { UpdateTrackDto } from 'src/tracks/dto/update-track.dto';
 import { CreateArtistDto } from 'src/artists/dto/create-artist.dto';
 import { UpdateArtistDto } from 'src/artists/dto/update-artist.dto';
+import { CreateAlbumDto } from '../albums/dto/create-album.dto';
+import { UpdateAlbumDto } from '../albums/dto/update-album.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { Album } from 'src/albums/entities/album.entity';
 
 @Injectable()
 export class DBService {
   private readonly users: User[] = [];
   private readonly tracks: Track[] = [];
   private readonly artists: Artist[] = [];
+  private readonly albums: Album[] = [];
 
   findAllUsers() {
     return this.users;
@@ -108,5 +112,39 @@ export class DBService {
       tracksOfArtist.forEach((track) => (track.artistId = null));
     }
     return indexOfArtist === -1 ? false : true;
+  }
+
+  findAllAlbums() {
+    return this.albums;
+  }
+
+  findOneAlbum(id: string) {
+    return this.albums.find((record) => record.id === id);
+  }
+
+  createAlbum(dto: CreateAlbumDto) {
+    const uuid = uuidv4();
+    this.albums.push({ id: uuid, ...dto });
+    const res = { ...this.albums[this.albums.length - 1] };
+    return res;
+  }
+
+  updateAlbum(id: string, dto: UpdateAlbumDto) {
+    let album = this.albums.find((record) => record.id === id);
+    if (!album) return false;
+    album = { ...album, ...dto };
+    return album;
+  }
+
+  removeAlbum(id: string) {
+    const indexOfAlbum = this.albums.findIndex((record) => record.id === id);
+    if (indexOfAlbum >= 0) {
+      const deletedAlbum = this.albums.splice(indexOfAlbum, 1);
+      const tracksOfAlbum = this.tracks.filter((track) => {
+        return track.albumId === deletedAlbum[0].id;
+      });
+      tracksOfAlbum.forEach((track) => (track.albumId = null));
+    }
+    return indexOfAlbum === -1 ? false : true;
   }
 }
