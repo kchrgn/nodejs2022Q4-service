@@ -9,29 +9,29 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() dto: CreateUserDto) {
-    return this.usersService.create(dto);
-  }
-
   @Get()
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAllUsers();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    return this.usersService.findOneUser(id);
+  }
+
+  @Post()
+  create(@Body() dto: CreateUserDto) {
+    return this.usersService.createUser(dto);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePasswordDto) {
-    return this.usersService.update(id, dto);
+    return this.usersService.updateUser(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+    return this.usersService.removeUser(id);
   }
 }

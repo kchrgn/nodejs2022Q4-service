@@ -9,39 +9,43 @@ import { validate as uuidValidate } from 'uuid';
 @Injectable()
 export class UsersService {
   constructor(private readonly database: DBService) {}
-  create(dto: CreateUserDto) {
-    dto.version = 1;
-    dto.createdAt = +new Date();
-    dto.updatedAt = +new Date();
-    const result = this.database.create(dto);
-    delete result.password;
-    return result;
-  }
 
-  findAll() {
-    const result = this.database.findAll().map((item) => {
+  findAllUsers() {
+    const result = this.database.findAllUsers().map((item) => {
       delete item.password;
       return item;
     });
     return result;
   }
 
-  findOne(id: string) {
+  findOneUser(id: string) {
     if (!uuidValidate(id)) throw new HttpException('User id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
-    const result = this.database.findOne(id);
+    const result = this.database.findOneUser(id);
     if (!result) throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     delete result.password;
     return result;
   }
 
-  update(id: string, dto: UpdatePasswordDto) {
+  createUser(dto: CreateUserDto) {
+    if (!dto.login || !dto.password) {
+      throw new HttpException('Request body does not contain required fields (login, password)', HttpStatus.BAD_REQUEST);
+    }
+    dto.version = 1;
+    dto.createdAt = +new Date();
+    dto.updatedAt = +new Date();
+    const result = this.database.createUser(dto);
+    delete result.password;
+    return result;
+  }
+
+  updateUser(id: string, dto: UpdatePasswordDto) {
     if (!dto.newPassword && !dto.oldPassword) {
       throw new HttpException('DTO for this request is not correct', HttpStatus.BAD_REQUEST);
     }
     if (!uuidValidate(id)) {
       throw new HttpException('User id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
     }
-    const user = this.database.findOne(id);
+    const user = this.database.findOneUser(id);
     if (!user) {
       throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     }
@@ -52,7 +56,7 @@ export class UsersService {
     user.version += 1;
     user.password = dto.newPassword;
     user.updatedAt = +new Date();
-    const result = this.database.update(id, user);
+    const result = this.database.updateUser(id, user);
 
     if (!result) {
       throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
@@ -61,9 +65,9 @@ export class UsersService {
     return result;
   }
 
-  remove(id: string) {
+  removeUser(id: string) {
     if (!uuidValidate(id)) throw new HttpException('User id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
-    const result = this.database.remove(id);
+    const result = this.database.removeUser(id);
     if (!result) throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     return result;
   }

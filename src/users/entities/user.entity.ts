@@ -1,5 +1,5 @@
 // export class User {}
-export interface UserEntity {
+export interface User {
   id: string; // uuid v4
   login: string;
   password: string;
