@@ -88,7 +88,11 @@ export class DBService {
   removeTrack(id: string) {
     const indexOfTrack = this.tracks.findIndex((record) => record.id === id);
     if (indexOfTrack >= 0) {
-      this.tracks.splice(indexOfTrack, 1);
+      const deletedATrack = this.tracks.splice(indexOfTrack, 1);
+      const favoriteTrackstWhitoutDeleted = this.favorites.tracks.filter((item) => {
+        return item !== deletedATrack[0].id;
+      });
+      this.favorites.tracks = favoriteTrackstWhitoutDeleted;
     }
     return indexOfTrack === -1 ? false : true;
   }
@@ -123,6 +127,10 @@ export class DBService {
         return track.artistId === deletedArtistst[0].id;
       });
       tracksOfArtist.forEach((track) => (track.artistId = null));
+      const favoriteArtistWhitoutDeleted = this.favorites.artists.filter((item) => {
+        return item !== deletedArtistst[0].id;
+      });
+      this.favorites.artists = favoriteArtistWhitoutDeleted;
     }
     return indexOfArtist === -1 ? false : true;
   }
@@ -157,6 +165,10 @@ export class DBService {
         return track.albumId === deletedAlbum[0].id;
       });
       tracksOfAlbum.forEach((track) => (track.albumId = null));
+      const favoriteAlbumsWhitoutDeleted = this.favorites.albums.filter((item) => {
+        return item !== deletedAlbum[0].id;
+      });
+      this.favorites.albums = favoriteAlbumsWhitoutDeleted;
     }
     return indexOfAlbum === -1 ? false : true;
   }
