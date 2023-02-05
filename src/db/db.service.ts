@@ -19,6 +19,19 @@ export class DBService {
   private readonly tracks: Track[] = [];
   private readonly artists: Artist[] = [];
   private readonly albums: Album[] = [];
+  private readonly favorites: {
+    tracks: Array<string>;
+    artists: Array<string>;
+    albums: Array<string>;
+  };
+
+  constructor() {
+    this.favorites = {
+      albums: [],
+      tracks: [],
+      artists: [],
+    };
+  }
 
   findAllUsers() {
     return this.users;
@@ -146,5 +159,72 @@ export class DBService {
       tracksOfAlbum.forEach((track) => (track.albumId = null));
     }
     return indexOfAlbum === -1 ? false : true;
+  }
+
+  getAllFavorites() {
+    const favTracks: Track[] = [];
+    this.favorites.tracks.forEach((id) => {
+      const item = this.findOneTrack(id);
+      if (item) favTracks.push(item);
+    });
+    const favAlbums: Album[] = [];
+    this.favorites.albums.forEach((id) => {
+      const item = this.findOneAlbum(id);
+      if (item) favAlbums.push(item);
+    });
+    const favArtists: Artist[] = [];
+    this.favorites.artists.forEach((id) => {
+      const item = this.findOneArtist(id);
+      if (item) favArtists.push(item);
+    });
+    return { tracks: favTracks, albums: favAlbums, artists: favArtists };
+  }
+
+  addTrackToFavorites(id: string) {
+    if (this.tracks.findIndex((record) => record.id === id) >= 0) {
+      this.favorites.tracks.push(id);
+      return true;
+    }
+    return false;
+  }
+
+  removeTrackFromFavorites(id: string) {
+    const indexOfTrack = this.favorites.tracks.findIndex((record) => record === id);
+    if (indexOfTrack >= 0) {
+      this.favorites.tracks.splice(indexOfTrack, 1);
+    }
+    return indexOfTrack === -1 ? false : true;
+  }
+
+  addAlbumToFavorites(id: string) {
+    if (this.albums.findIndex((record) => record.id === id) >= 0) {
+      this.favorites.albums.push(id);
+      return true;
+    }
+    return false;
+  }
+
+  removeAlbumFromFavorites(id: string) {
+    const indexOfAlbum = this.favorites.albums.findIndex((record) => record === id);
+    if (indexOfAlbum >= 0) {
+      this.favorites.albums.splice(indexOfAlbum, 1);
+    }
+    return indexOfAlbum === -1 ? false : true;
+  }
+
+  addArtistToFavorites(id: string) {
+    if (this.artists.findIndex((record) => record.id === id) >= 0) {
+      this.favorites.artists.push(id);
+      return true;
+    }
+    return false;
+  }
+
+  removeArtistFromFavorites(id: string) {
+    const indexOfArtist = this.favorites.artists.findIndex((record) => record === id);
+    if (indexOfArtist >= 0) {
+      this.favorites.artists.splice(indexOfArtist, 1);
+    }
+    return indexOfArtist === -1 ? false : true;
   }
 }
