@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { SwaggerModule } from '@nestjs/swagger';
-import {readFileSync} from 'fs'
+import { readFileSync } from 'fs';
 
 dotenv.config();
 

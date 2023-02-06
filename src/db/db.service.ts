@@ -123,13 +123,22 @@ export class DBService {
     const indexOfArtist = this.artists.findIndex((record) => record.id === id);
     if (indexOfArtist >= 0) {
       const deletedArtistst = this.artists.splice(indexOfArtist, 1);
+
       const tracksOfArtist = this.tracks.filter((track) => {
         return track.artistId === deletedArtistst[0].id;
       });
+
+      const albumsOfArtist = this.albums.filter((album) => {
+        return album.artistId === deletedArtistst[0].id;
+      });
+
       tracksOfArtist.forEach((track) => (track.artistId = null));
+      albumsOfArtist.forEach((album) => (album.artistId = null));
+
       const favoriteArtistWhitoutDeleted = this.favorites.artists.filter((item) => {
         return item !== deletedArtistst[0].id;
       });
+
       this.favorites.artists = favoriteArtistWhitoutDeleted;
     }
     return indexOfArtist === -1 ? false : true;
