@@ -4,7 +4,9 @@ import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { HttpCode } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Tracks')
 @Controller('track')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
