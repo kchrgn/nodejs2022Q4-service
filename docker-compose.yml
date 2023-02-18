@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    working_dir: /app
+    depends_on:
+      - database
+    restart: always
+    volumes:
+      - ./:/app
+    networks:
+      - app_network
+  database:
+    build: ./database
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    networks:
+      - app_network
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    restart: always
+networks:
+  app_network:
