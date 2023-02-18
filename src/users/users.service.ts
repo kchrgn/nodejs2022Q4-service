@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DBService } from 'src/db/db.service';
+import { DBService } from '../db/db.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { HttpException } from '@nestjs/common/exceptions';

@@ -1,6 +1,7 @@
-FROM node:18-alpine
+FROM node:18-alpine3.17
 WORKDIR /app
-COPY . .
+COPY package*.json .
 RUN npm install
-CMD ["npm", "start"]
+COPY . .
+CMD ["npm", "run", "start:dev"]
 EXPOSE 4000
