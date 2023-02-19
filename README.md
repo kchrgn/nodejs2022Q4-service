@@ -19,6 +19,10 @@ docker build -t kchrgn/home-library-service:app .
 docker build -t kchrgn/home-library-service:database ./database
 ```
 
+## Scanning image
+
+npm run scan
+
 ## Installing NPM modules
 
 ```
