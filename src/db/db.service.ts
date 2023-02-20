@@ -33,35 +33,35 @@ export class DBService {
     };
   }
 
-  findAllUsers() {
-    return this.users;
-  }
+  // findAllUsers() {
+  //   return this.users;
+  // }
 
-  findOneUser(id: string) {
-    return this.users.find((record) => record.id === id);
-  }
+  // findOneUser(id: string) {
+  //   return this.users.find((record) => record.id === id);
+  // }
 
-  createUser(dto: CreateUserDto) {
-    const uuid = uuidv4();
-    this.users.push({ id: uuid, ...dto });
-    const res = { ...this.users[this.users.length - 1] };
-    return res;
-  }
+  // createUser(dto: CreateUserDto) {
+  //   const uuid = uuidv4();
+  //   this.users.push({ id: uuid, ...dto });
+  //   const res = { ...this.users[this.users.length - 1] };
+  //   return res;
+  // }
 
-  updateUser(id: string, dto: UpdateUserDto) {
-    let user = this.users.find((record) => record.id === id);
-    if (!user) return false;
-    user = { ...user, ...dto };
-    return user;
-  }
+  // updateUser(id: string, dto: UpdateUserDto) {
+  //   let user = this.users.find((record) => record.id === id);
+  //   if (!user) return false;
+  //   user = { ...user, ...dto };
+  //   return user;
+  // }
 
-  removeUser(id: string) {
-    const indexOfUser = this.users.findIndex((record) => record.id === id);
-    if (indexOfUser >= 0) {
-      this.users.splice(indexOfUser, 1);
-    }
-    return indexOfUser === -1 ? false : true;
-  }
+  // removeUser(id: string) {
+  //   const indexOfUser = this.users.findIndex((record) => record.id === id);
+  //   if (indexOfUser >= 0) {
+  //     this.users.splice(indexOfUser, 1);
+  //   }
+  //   return indexOfUser === -1 ? false : true;
+  // }
 
   findAllTracks() {
     return this.tracks;
