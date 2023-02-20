@@ -12,7 +12,7 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly database: DBService,
+    // private readonly database: DBService,
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
@@ -30,7 +30,7 @@ export class UsersService {
   async findOneUser(id: string) {
     if (!uuidValidate(id)) throw new HttpException('User id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
     // const result = this.database.findOneUser(id);
-    const result = await this.userRepository.findOne({ where: { id } });
+    const result = await this.userRepository.findOneBy({ id });
     if (!result) throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     // delete result.password;
     return result.stripePasssword();
@@ -58,7 +58,7 @@ export class UsersService {
       throw new HttpException('User id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
     }
     // const user = this.database.findOneUser(id);
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     }

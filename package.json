@@ -7,12 +7,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nodemon --legacy-watch -x ts-node src/main.ts",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start": "node dist/src/main.js",
+    "start:dev": "npm run build && nodemon --legacy-watch -x ts-node src/main.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --config ./test/jest-e2e.json",
     "test:auth": "cross-env TEST_MODE=auth jest --config ./test/jest-e2e.json",
@@ -21,7 +19,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "docker:build": "docker build -t kchrgn/home-library-service:app .",
     "docker:scan": "docker scan kchrgn/home-library-service:app",
-    "scan": "npm run docker:build && npm run docker:scan"
+    "scan": "npm run docker:build && npm run docker:scan",
+    "typeorm": "npm run build && npx typeorm -d dist/ormconfig.js",
+    "migration:generate": "npm run typeorm -- migration:generate",
+    "migration:create": "npx typeorm migration:create"
   },
   "dependencies": {
     "@nestjs/common": "^8.4.7",

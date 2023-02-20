@@ -7,11 +7,14 @@ import { ArtistsModule } from './artists/artists.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import configService from '../ormconfig';
+import { DataSource } from 'typeorm';
+import configService, { dataSourceOptions } from '../ormconfig';
 
 @Module({
-  imports: [UsersModule, TracksModule, ArtistsModule, AlbumsModule, FavoritesModule, TypeOrmModule.forRoot(configService)],
+  imports: [UsersModule, TracksModule, ArtistsModule, AlbumsModule, FavoritesModule, TypeOrmModule.forRoot(dataSourceOptions)],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor (private dataSource: DataSource) {}
+}

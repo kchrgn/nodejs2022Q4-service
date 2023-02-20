@@ -1,9 +1,10 @@
 import * as dotenv from 'dotenv';
-import { DataSourceOptions } from 'typeorm';
+import { User } from './src/users/entities/user.entity';
+import { DataSourceOptions, DataSource } from 'typeorm';
 
 dotenv.config();
 
-export default {
+export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
   port: parseInt(process.env.DB_PORT, 10),
@@ -11,5 +12,9 @@ export default {
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
   synchronize: false,
-  entities: ['dist/**/entities/*.entity.js'],
+  entities: ['dist/**/*.entity.js'],
+  migrations: ['dist/**/migration/*.js']
 } as DataSourceOptions;
+
+const dataSource = new DataSource(dataSourceOptions);
+export default dataSource;
