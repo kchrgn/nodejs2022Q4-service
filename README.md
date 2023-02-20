@@ -1,10 +1,5 @@
 # Home Library Service
 
-## Prerequisites
-
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
-
 ## Downloading
 
 ```
@@ -16,6 +11,24 @@ git clone {repository URL}
 ```
 npm install
 ```
+
+## Running application with containerization
+
+```
+docker compose up
+```
+
+## Creating app and database image (if you need)
+
+```
+docker build -t kchrgn/home-library-service:app .
+docker build -t kchrgn/home-library-service:database ./database
+```
+
+## Scanning image
+
+npm run scan
+
 
 ## Running application
 
@@ -31,7 +44,7 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
+To run all tests
 
 ```
 npm run test
@@ -41,18 +54,6 @@ To run only one of all test suites
 
 ```
 npm run test -- <path to suite>
-```
-
-To run all test with authorization
-
-```
-npm run test:auth
-```
-
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
 ```
 
 ### Auto-fix and format
