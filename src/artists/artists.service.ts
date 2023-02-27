@@ -5,13 +5,15 @@ import { DBService } from 'src/db/db.service';
 import { HttpException } from '@nestjs/common/exceptions';
 import { HttpStatus } from '@nestjs/common/enums';
 import { validate as uuidValidate } from 'uuid';
+import { LoggerService } from 'src/logger/logger.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private readonly database: DBService) {}
+  constructor(private readonly database: DBService, private readonly logger: LoggerService) {}
 
   findAll() {
     const result = this.database.findAllArtists();
+    this.logger.res(HttpStatus.OK);
     return result;
   }
 
@@ -19,6 +21,7 @@ export class ArtistsService {
     if (!uuidValidate(id)) throw new HttpException('Artist id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
     const result = this.database.findOneArtist(id);
     if (!result) throw new HttpException(`Artist with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
+    this.logger.res(HttpStatus.OK);
     return result;
   }
 
@@ -27,6 +30,7 @@ export class ArtistsService {
       throw new HttpException('Request body does not contain required fields (name, grammy)', HttpStatus.BAD_REQUEST);
     }
     const result = this.database.createArtist(dto);
+    this.logger.res(HttpStatus.CREATED);
     return result;
   }
 
@@ -41,6 +45,7 @@ export class ArtistsService {
     if (!result) {
       throw new HttpException(`Artist with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     }
+    this.logger.res(HttpStatus.OK);
     return result;
   }
 
@@ -48,6 +53,7 @@ export class ArtistsService {
     if (!uuidValidate(id)) throw new HttpException('Artist id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
     const result = this.database.removeArtist(id);
     if (!result) throw new HttpException(`Artist with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
+    this.logger.res(HttpStatus.NO_CONTENT);
     return result;
   }
 }

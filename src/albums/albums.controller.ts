@@ -7,9 +7,12 @@ import { HttpStatus } from '@nestjs/common/enums';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { LoggerService } from 'src/logger/logger.service';
+import { UseFilters } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/exception/exception.filter';
 
 @ApiTags('Albums')
 @Controller('album')
+@UseFilters(new HttpExceptionFilter())
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService, private readonly logger: LoggerService) {}
 

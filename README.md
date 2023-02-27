@@ -17,6 +17,10 @@ git clone {repository URL}
 npm install
 ```
 
+## Logging
+
+Use LOG_LEVEL variable in .env file to adjust logging level. Value 2 - all messages, 1 - only errors, 0 - none messages
+
 ## Running application
 
 ```
