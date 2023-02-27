@@ -3,11 +3,6 @@ import { EOL } from 'os';
 
 @Injectable()
 export class LoggerService {
-  log(message: any) {
-    if (+process.env.LOG_LEVEL < 2) return;
-    process.stdout.write(JSON.stringify(message), 'utf-8');
-  }
-
   req(req: any) {
     if (+process.env.LOG_LEVEL < 2) return;
     process.stdout.write(`Incoming request: url = ${req.url}, query_params = ${JSON.stringify(req.query)}, body = ${JSON.stringify(req.body)}${EOL}`, 'utf-8');
