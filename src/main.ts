@@ -7,7 +7,9 @@ import { readFileSync } from 'fs';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
   SwaggerModule.setup('doc', app, JSON.parse(readFileSync('./doc/openapi.json') as unknown as string));
   await app.listen(process.env.PORT || 4000);
 }
