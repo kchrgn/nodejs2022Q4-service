@@ -1,39 +1,49 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Req } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { HttpCode } from '@nestjs/common';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { LoggerService } from 'src/logger/logger.service';
+import { UseFilters } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/exception/exception.filter';
 
 @ApiTags('Albums')
 @Controller('album')
+@UseFilters(new HttpExceptionFilter())
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(private readonly albumsService: AlbumsService, private readonly logger: LoggerService) {}
 
   @Get()
-  findAll() {
+  findAll(@Req() request: Request) {
+    this.logger.req(request);
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @Req() request: Request) {
+    this.logger.req(request);
     return this.albumsService.findOne(id);
   }
 
   @Post()
-  create(@Body() dto: CreateAlbumDto) {
+  create(@Body() dto: CreateAlbumDto, @Req() request: Request) {
+    this.logger.req(request);
     return this.albumsService.create(dto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateAlbumDto) {
+  update(@Param('id') id: string, @Body() dto: UpdateAlbumDto, @Req() request: Request) {
+    this.logger.req(request);
     return this.albumsService.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Req() request: Request) {
+    this.logger.req(request);
     return this.albumsService.remove(id);
   }
 }

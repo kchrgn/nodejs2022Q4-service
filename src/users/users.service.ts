@@ -5,16 +5,18 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { HttpException } from '@nestjs/common/exceptions';
 import { HttpStatus } from '@nestjs/common/enums';
 import { validate as uuidValidate } from 'uuid';
+import { LoggerService } from 'src/logger/logger.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly database: DBService) {}
+  constructor(private readonly database: DBService, private readonly logger: LoggerService) {}
 
   findAllUsers() {
     const result = this.database.findAllUsers().map((item) => {
       delete item.password;
       return item;
     });
+    this.logger.res(HttpStatus.OK);
     return result;
   }
 
@@ -23,6 +25,7 @@ export class UsersService {
     const result = this.database.findOneUser(id);
     if (!result) throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     delete result.password;
+    this.logger.res(HttpStatus.OK);
     return result;
   }
 
@@ -35,6 +38,7 @@ export class UsersService {
     dto.updatedAt = +new Date();
     const result = this.database.createUser(dto);
     delete result.password;
+    this.logger.res(HttpStatus.CREATED);
     return result;
   }
 
@@ -62,6 +66,7 @@ export class UsersService {
       throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
     }
     delete result.password;
+    this.logger.res(HttpStatus.OK);
     return result;
   }
 
@@ -69,6 +74,7 @@ export class UsersService {
     if (!uuidValidate(id)) throw new HttpException('User id is invalid (not uuid)', HttpStatus.BAD_REQUEST);
     const result = this.database.removeUser(id);
     if (!result) throw new HttpException(`User with id = ${id} doesn't exist`, HttpStatus.NOT_FOUND);
+    this.logger.res(HttpStatus.NO_CONTENT);
     return result;
   }
 }
